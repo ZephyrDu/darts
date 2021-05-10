@@ -4,6 +4,7 @@ import torch
 import shutil
 import torchvision.transforms as transforms
 from torch.autograd import Variable
+from copy import deepcopy
 
 
 class AvgrageMeter(object):
@@ -91,8 +92,15 @@ def save_checkpoint(state, is_best, save):
     shutil.copyfile(filename, best_filename)
 
 
-def save(model, model_path):
+def save(epoch,args,model,optimizer,scheduler,accuracies, model_path):
   torch.save(model.state_dict(), model_path)
+  torch.save({'epoch': epoch + 1,
+              'args': deepcopy(args),
+              'state_dict': model.state_dict(),
+              'optimizer': optimizer.state_dict(),
+              'scheduler': scheduler.state_dict(),
+              'accuracies': accuracies},
+             model_path)
 
 
 def load(model, model_path):

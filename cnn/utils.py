@@ -93,15 +93,11 @@ def save_checkpoint(state, is_best, save_path):
 
 
 def save(epoch, args, model, optimizer, scheduler, accuracies, model_path):
-    model_cpu = deepcopy(model).cpu()
-    optimizer_cpu = deepcopy(optimizer).cpu()
-    scheduler_cpu = deepcopy(scheduler).cpu()
-
     torch.save({'epoch': epoch + 1,
                 'args': deepcopy(args),
                 'state_dict': model.state_dict(),
-                'optimizer': optimizer_cpu.state_dict(),
-                'scheduler': scheduler_cpu.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'scheduler': scheduler.state_dict(),
                 'accuracies': accuracies},
                model_path)
 

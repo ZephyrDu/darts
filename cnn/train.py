@@ -92,6 +92,8 @@ def main():
 
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, float(args.epochs))
 
+    start_epoch = 0
+
     if os.path.isfile((os.path.join(args.save, 'checkpoint.pt'))):
         checkpoint = torch.load(os.path.join(args.save, 'checkpoint.pt'))
         start_epoch = checkpoint['epoch']
@@ -101,7 +103,7 @@ def main():
         accuracies = checkpoint['accuracies']
         print('Load checkpoint from {:} with start-epoch = {:}, acc: {}'.format(args.save, start_epoch, accuracies))
 
-    for epoch in range(args.epochs):
+    for epoch in range(start_epoch, args.epochs):
         scheduler.step()
         logging.info('epoch %d lr %e', epoch, scheduler.get_lr()[0])
         model.drop_path_prob = args.drop_path_prob * epoch / args.epochs

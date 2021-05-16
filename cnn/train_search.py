@@ -101,6 +101,8 @@ def main():
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer, float(args.epochs), eta_min=args.learning_rate_min)
 
+    start_epoch = 0
+
     if os.path.isfile((os.path.join(args.save, 'checkpoint.pt'))):
         checkpoint = torch.load(os.path.join(args.save, 'checkpoint.pt'))
         start_epoch = checkpoint['epoch']
@@ -112,7 +114,7 @@ def main():
 
     architect = Architect(model, args)
 
-    for epoch in range(args.epochs):
+    for epoch in range(start_epoch, args.epochs):
         scheduler.step()
         lr = scheduler.get_lr()[0]
         logging.info('epoch %d lr %e', epoch, lr)
